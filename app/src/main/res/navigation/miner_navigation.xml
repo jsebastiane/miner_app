@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/miner_navigation"
+    android:label="Home"
+    app:startDestination="@id/viewPagerFragment">
+
+    <fragment
+        android:id="@+id/viewPagerFragment"
+        android:name="sebastian.company.min3rapp.ui.ViewPagerFragment"
+        android:label=""
+        tools:layout="@layout/fragment_view_pager" >
+        <action
+            android:id="@+id/action_viewPagerFragment_to_newsDetailFragment"
+            app:destination="@id/newsDetailFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_viewPagerFragment_to_newsWebFragment"
+            app:destination="@id/newsWebFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_viewPagerFragment_to_coinPricesFragment"
+            app:destination="@id/coinPricesFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_viewPagerFragment_to_memoryGameFragment"
+            app:destination="@id/memoryGameFragment" />
+        <action
+            android:id="@+id/action_viewPagerFragment_to_newsTagsFragment"
+            app:destination="@id/newsTagsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/newsDetailFragment"
+        android:name="sebastian.company.min3rapp.ui.news_details.NewsDetailFragment"
+        android:label=""
+        tools:layout="@layout/fragment_news_detail">
+        <argument
+            android:name="imageUrl"
+            app:argType="string"
+            android:defaultValue=""/>
+        <argument
+            android:name="story"
+            app:argType="string"
+            android:defaultValue=""/>
+        <argument
+            android:name="title"
+            app:argType="string"
+            android:defaultValue=""/>
+    </fragment>
+    <fragment
+        android:id="@+id/newsWebFragment"
+        android:name="sebastian.company.min3rapp.ui.news_details.NewsWebFragment"
+        android:label=""
+        tools:layout="@layout/fragment_news_web">
+
+        <argument
+            android:name="newsUrl"
+            app:argType="string"
+            android:defaultValue=""/>
+
+    </fragment>
+    <fragment
+        android:id="@+id/coinPricesFragment"
+        android:name="sebastian.company.min3rapp.ui.crypto_data.coin_info.CoinPricesFragment"
+        android:label=""
+        tools:layout="@layout/fragment_coin_prices" />
+    <fragment
+        android:id="@+id/memoryGameFragment"
+        android:name="sebastian.company.min3rapp.ui.discover.distractions.memory.MemoryGameFragment"
+        android:label=""
+        tools:layout="@layout/fragment_memory_game" />
+    <fragment
+        android:id="@+id/newsTagsFragment"
+        android:name="sebastian.company.min3rapp.ui.my_news.news_tags.NewsTagsFragment"
+        android:label="fragment_news_tags"
+        tools:layout="@layout/fragment_news_tags" />
+</navigation>
