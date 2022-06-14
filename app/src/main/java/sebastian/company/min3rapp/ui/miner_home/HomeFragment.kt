@@ -62,22 +62,27 @@ class HomeFragment : Fragment(), NewsAction {
             layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         }
 
-        viewModel.getArticlesCf()
+//        viewModel.getArticlesCf()
+
+        binding.refreshLayout.setOnRefreshListener {
+//            viewModel.getArticlesCf()
+        }
 
     }
 
     private fun observeViewModel(){
         viewModel.requestState.observe(viewLifecycleOwner, Observer { request ->
             request?.let {
+                binding.refreshLayout.isRefreshing = false
                 if(it.isLoading){
                     binding.homeProgressBar.visibility = View.VISIBLE
                 }else{
                     binding.homeProgressBar.visibility = View.GONE
                 }
 
-                if(it.error.isNotEmpty()){
-                    Toast.makeText(context, it.error, Toast.LENGTH_SHORT).show()
-                }
+//                if(it.error.isNotEmpty()){
+//                    Toast.makeText(context, it.error, Toast.LENGTH_SHORT).show()
+//                }
                 if (it.error.isEmpty()){
                     if(it.articles.isNotEmpty()){
                         newsAdapter.setData(it.articles)

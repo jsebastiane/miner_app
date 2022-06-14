@@ -8,61 +8,49 @@
 
     <TextView
         android:id="@+id/errorMessage"
+        style="@style/BrandName"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:gravity="center"
-        android:visibility="gone"
-        style="@style/BrandName"
-        android:layout_marginVertical="16dp"
         android:layout_marginHorizontal="32dp"
-        app:layout_constraintTop_toBottomOf="@id/chipScrollView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <ProgressBar
-        android:id="@+id/myNewsProgressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_marginVertical="16dp"
+        android:gravity="center"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/chipScrollView" />
+
 
     <LinearLayout
         android:id="@+id/addTopicsLayout"
-        android:visibility="gone"
         android:layout_width="0dp"
-        android:layout_marginHorizontal="32dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
         android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/addTopicsButton"
+            style="@style/CarouselHeadlines"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add Topics"
-            style="@style/CarouselHeadlines"
+            android:background="@drawable/gradient_stroke_rect"
             android:gravity="center"
             android:paddingVertical="10dp"
-            android:background="@drawable/gradient_stroke_rect"
-            />
+            android:text="Add Topics" />
 
         <TextView
+            style="@style/WhiteTextLight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            style="@style/WhiteTextLight"
-            android:gravity="center"
             android:layout_gravity="center"
-            android:text="Add news topics to personalize your experience!"
-            />
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="Add news topics to personalize your experience!" />
 
     </LinearLayout>
 
@@ -70,9 +58,10 @@
     <HorizontalScrollView
         android:id="@+id/chipScrollView"
         android:layout_width="match_parent"
-        android:paddingHorizontal="16dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
+        android:nestedScrollingEnabled="true"
+        android:paddingHorizontal="16dp"
         android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -83,40 +72,47 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:chipSpacingHorizontal="8dp"
+            android:paddingVertical="4dp"
             app:selectionRequired="true"
             app:singleLine="true"
-            app:singleSelection="true"/>
+            app:singleSelection="true" />
 
 
     </HorizontalScrollView>
 
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/articleScrollView"
-        android:visibility="visible"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refreshLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="0dp"
-        android:fillViewport="true"
         android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chipScrollView">
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/articleBannersRecycler"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/articleBannersRecycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0dp" />
-        </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
-    </androidx.core.widget.NestedScrollView>
+    <ProgressBar
+        android:id="@+id/myNewsProgressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+

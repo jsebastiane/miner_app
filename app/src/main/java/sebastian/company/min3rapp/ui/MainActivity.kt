@@ -10,6 +10,9 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.ads.*
+import com.google.firebase.FirebaseApp
+import com.google.firebase.appcheck.FirebaseAppCheck
+import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
 import dagger.hilt.android.AndroidEntryPoint
 import sebastian.company.min3rapp.R
 import sebastian.company.min3rapp.databinding.ActivityMainBinding
@@ -32,6 +35,12 @@ class MainActivity : AppCompatActivity() {
 
 
         MobileAds.initialize(this)
+
+        FirebaseApp.initializeApp(/*context=*/this)
+        val firebaseAppCheck = FirebaseAppCheck.getInstance()
+        firebaseAppCheck.installAppCheckProviderFactory(
+            PlayIntegrityAppCheckProviderFactory.getInstance()
+        )
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.title = getString(R.string.app_name)

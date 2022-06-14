@@ -113,6 +113,8 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:30.0.0')
 
     // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-appcheck-playintegrity'
+
 
     // Declare the dependency for the Firebase SDK for Google Analytics
     implementation 'com.google.firebase:firebase-analytics-ktx'

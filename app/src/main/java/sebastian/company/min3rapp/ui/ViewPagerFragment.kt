@@ -2,8 +2,10 @@ package sebastian.company.min3rapp.ui
 
 import android.os.Bundle
 import android.view.*
+import android.widget.HorizontalScrollView
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import sebastian.company.min3rapp.R
@@ -113,7 +115,6 @@ class ViewPagerFragment : Fragment() {
         val item = menu.findItem(R.id.edit_action)
         item.isVisible = isOnMyNews
     }
-
 
 
 }

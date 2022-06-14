@@ -93,7 +93,6 @@ class MinerHomeViewModel : ViewModel() {
     }
 
     private fun introduceAds(data: List<DataArticle>){
-
         viewModelScope.launch{
             //give ads 1 second to load
             delay(1000)

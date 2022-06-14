@@ -11,6 +11,7 @@ import com.google.firebase.functions.FirebaseFunctionsException
 import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -78,14 +79,9 @@ class MyNewsViewModel(application: Application): AndroidViewModel(application){
                     }
                     _requestState.value = DataListState(error = "Error retrieving articles")
                 }else{
-                    Log.d("SUCCESS", "Successfully Called CF")
                     //only if ads are not empty and articles is not empty do we introduce ads
                     if(task.result.isNotEmpty()){
-                        if(adsState.ads.isNotEmpty()){
-                            introduceAds(task.result)
-                        }else{
-                            _requestState.value = DataListState(articles = task.result)
-                        }
+                        introduceAds(task.result)
                     }else{
                         _requestState.value = DataListState(error = "Oops! No articles found...")
                     }
@@ -101,13 +97,23 @@ class MyNewsViewModel(application: Application): AndroidViewModel(application){
     }
 
     private fun introduceAds(data: List<DataArticle>){
-        val articles = data.toMutableList()
-        for(i in 0 until adsState.ads.size){
-            //placing ad every 4 articles
-            val index = (i + 1) * 5
-            articles.add(index = index, DataArticle(nativeAd = adsState.ads[i]))
+        viewModelScope.launch {
+            delay(1000)
+            if(adsState.ads.isEmpty()){
+                _requestState.value = DataListState(articles = data)
+            }else{
+                val articles = data.toMutableList()
+                for(i in 0 until adsState.ads.size){
+                    //placing ad every 4 articles
+                    val index = (i + 1) * 5
+                    articles.add(index = index, DataArticle(nativeAd = adsState.ads[i]))
+                }
+                _requestState.value = DataListState(articles = articles)
+            }
         }
-        _requestState.value = DataListState(articles = articles)
+
+
+
 
     }
 

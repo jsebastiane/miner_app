@@ -66,14 +66,21 @@ class MyNewsFragment : Fragment(), MyNewsAction {
         binding.tagsChipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
             val chip = group.findViewById<Chip>(checkedIds[0])
             if(chip.isChecked){
-                if(chip.text == "all"){
-                    viewModel.getArticlesCf(myTopics)
+                if(chip.text == "ALL"){
+//                    viewModel.getArticlesCf(myTopics)
                 }else{
-                    viewModel.getArticlesCf(chip.text.toString())
+//                    viewModel.getArticlesCf(chip.text.toString())
                 }
             }
 
         }
+
+        binding.refreshLayout.setOnRefreshListener {
+            val chipId = binding.tagsChipGroup.checkedChipId
+            val checkedChip = binding.tagsChipGroup.findViewById<Chip>(chipId)
+            viewModel.getArticlesCf(checkedChip.text.toString())
+        }
+
 
         //Add swipe to refresh - get chip selected and refresh
 
@@ -101,13 +108,13 @@ class MyNewsFragment : Fragment(), MyNewsAction {
         //If no topics are found show option to add, otherwise start loading articles with topics
         viewModel.myTopics.observe(viewLifecycleOwner, Observer { topics ->
             if (topics.isNullOrEmpty()) {
-                binding.articleScrollView.visibility = View.GONE
+                binding.articleBannersRecycler.visibility = View.GONE
                 binding.chipScrollView.visibility = View.GONE
                 binding.addTopicsLayout.visibility = View.VISIBLE
 
             } else {
                 binding.chipScrollView.visibility = View.VISIBLE
-                binding.articleScrollView.visibility = View.VISIBLE
+                binding.articleBannersRecycler.visibility = View.VISIBLE
                 binding.addTopicsLayout.visibility = View.GONE
                 myTopics = topics
                 createNewsTags()
@@ -119,15 +126,20 @@ class MyNewsFragment : Fragment(), MyNewsAction {
         //articles
         viewModel.requestState.observe(viewLifecycleOwner, Observer { request ->
             request?.let {
-                binding.myNewsProgressBar.visibility = if (it.isLoading) View.VISIBLE else View.GONE
+                binding.refreshLayout.isRefreshing = false
+
+                if(it.isLoading){
+                    binding.myNewsProgressBar.visibility = View.VISIBLE
+                }else{
+                    binding.myNewsProgressBar.visibility = View.GONE
+                }
                 //wait for list of articles with ads from ViewModel
                 if (it.error.isEmpty()) {
-                    //an empty list will register as error so we do not have to check for empty list
-                    binding.errorMessage.visibility = View.GONE
-                    newsBannerRecyclerAdapter.setData(it.articles)
+                    if(it.articles.isNotEmpty()){
+                        newsBannerRecyclerAdapter.setData(it.articles)
+                    }
                 } else {
-                    binding.errorMessage.visibility = View.VISIBLE
-                    binding.errorMessage.text = it.error
+                    Toast.makeText(context, it.error, Toast.LENGTH_SHORT).show()
                 }
             }
         })
@@ -165,13 +177,13 @@ class MyNewsFragment : Fragment(), MyNewsAction {
 
     private fun createNewsTags(){
         val listNewsTags = myTopics.split(",").toMutableList()
-        listNewsTags.add(0, "all")
+        listNewsTags.add(0, "ALL")
         binding.tagsChipGroup.removeAllViews()
         viewLifecycleOwner.lifecycleScope.launch{
             println(Thread.currentThread().name)
             for (i in listNewsTags){
                 val chip = Chip(context)
-                chip.text = i.lowercase()
+                chip.text = i
                 binding.tagsChipGroup.addView(chip)
             }
             val allChip = binding.tagsChipGroup.getChildAt(0) as Chip

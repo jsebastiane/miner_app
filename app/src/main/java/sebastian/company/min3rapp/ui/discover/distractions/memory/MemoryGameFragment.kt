@@ -3,13 +3,11 @@ package sebastian.company.min3rapp.ui.discover.distractions.memory
 import android.app.AlertDialog
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.os.CountDownTimer
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.view.iterator
@@ -18,7 +16,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import sebastian.company.min3rapp.R
 import sebastian.company.min3rapp.common.UserPrefs
 import sebastian.company.min3rapp.databinding.FragmentMemoryGameBinding
@@ -32,15 +31,24 @@ class MemoryGameFragment : Fragment() {
     private val viewModel: MemoryGameViewModel by viewModels()
     private lateinit var userPreferences: UserPrefs
 
-    private var currentLevel: Int = 1
+    //gameTimer
+    private var testCountDownTimer: Job? = null
+    private var pregameCountDownTimer: Job? = null
+
+    //Maximum number of rounds with X number of cells
+    private val maxRounds = 4
+
+    //Current round in
+    private var currentRound: Int = 1
+
+    //Last number that was selected by player
     private var currentNumber: Int = 0
     private var currentScore: Int = 0
-    private var cellNumber: Int = 6
+    //Number of cells the player has to remember - increases every time maxRound is achieved
+    private var cellNumber: Int = 4
     private var lives: Int = 3
 
-    //Game timer
-    private lateinit var countDownTimer: CountDownTimer
-    private lateinit var pregameTimer: CountDownTimer
+
 
 
     override fun onCreateView(
@@ -58,43 +66,24 @@ class MemoryGameFragment : Fragment() {
             userPreferences = UserPrefs(it)
         }
 
-
         viewModel.memoryGameHighScore.observe(viewLifecycleOwner, Observer {highscore ->
             highscore?.let{
                 viewModel.setLocalHighScore(it)
             }
         })
 
-        //Initialise game timer
-        val seconds = (cellNumber + 1) * 1000
-        countDownTimer = object : CountDownTimer(seconds.toLong(), 1000) {
-            override fun onTick(p0: Long) {
-                val time = "0:0${(p0 / 1000)}"
-                binding.gameTimer.text = time
-            }
 
-            override fun onFinish() {
-                gameOver()
-            }
-
-        }
-
-        //Initialise pregame timer
-        pregameTimer = object : CountDownTimer(seconds.toLong(), 1000) {
-            override fun onTick(p0: Long) {
-                val time = "0:0${(p0 / 1000)}"
-                binding.gameTimer.text = time
-            }
-
-            override fun onFinish() {
-                startGame()
-            }
-
-        }
 
         //Starting game here
         restartGame()
 
+    }
+
+    private fun testTimer(seconds: Int) = flow{
+        for(i in seconds downTo 0){
+            emit(i)
+            delay(1000L)
+        }
     }
 
 
@@ -107,6 +96,7 @@ class MemoryGameFragment : Fragment() {
 
         for (i in numbersList.indices) {
             val cell = binding.gameGridView.getChildAt(i) as? TextView
+            //list is populated with 0's that make up for empty spaces on board
             if (numbersList[i] != 0) {
                 cell?.text = numbersList[i].toString()
                 cell?.setTextColor(ContextCompat.getColor(requireContext(), R.color.brand_white))
@@ -115,13 +105,30 @@ class MemoryGameFragment : Fragment() {
             }
         }
         binding.gameTimer.setTextColor(ContextCompat.getColor(requireContext(), R.color.brand_pink))
-        //Type 1 means the timer is a pre-game timer
-        pregameTimer.start()
+
+        val seconds = getGameSeconds()
+
+        pregameCountDownTimer = testTimer(seconds)
+            .onEach {
+                println("PREGAME: $it")
+                binding.gameTimer.text = it.toString()
+            if(it == 0){
+                startGame()
+            }}
+            .cancellable()
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+
 
     }
 
+
+
     private fun startGame() {
         //show gridLayout as it will be hidden beforehand
+
+        pregameCountDownTimer?.cancel()
+        pregameCountDownTimer = null
+
         for (i in binding.gameGridView.children) {
             val cell = i as? TextView
             if (cell?.text?.isEmpty() == false) {
@@ -143,8 +150,25 @@ class MemoryGameFragment : Fragment() {
                 R.color.brand_white
             )
         )
-        countDownTimer.start()
+
+        val seconds = getGameSeconds() - 1
+
+        testCountDownTimer = testTimer(seconds)
+            .onEach {println("IN PLAY: $it")
+                binding.gameTimer.text = it.toString()
+            if(it == 0){
+                println("Timer Done")
+                gameOver()
+            }}
+            .cancellable()
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+
+
     }
+
+
+
+
 
 
     //Add interaction to cells with playable numbers ( >0 )
@@ -159,7 +183,9 @@ class MemoryGameFragment : Fragment() {
                     this.setOnClickListener(null)
                     currentScore += 1
                     binding.score.text = currentScore.toString()
-                    countDownTimer.cancel()
+
+                    testCountDownTimer?.cancel()
+                    testCountDownTimer = null
                     nextLevel()
                 }
 
@@ -193,30 +219,36 @@ class MemoryGameFragment : Fragment() {
         }
     }
 
+
+
     private fun nextLevel() {
-        //If level is currently 5 then set to 0 and add 1 to cellNumber
-        if (currentLevel == 5) {
+        //Current number is the last selected number on the board
+        //max rounds is the how many times player sees X amount of cells before moving to next level
+        if (currentRound == maxRounds) {
             currentNumber = 0
-            currentLevel = 0
-            cellNumber += 1
+            currentRound = 0
+            //24 is the max number of cells that can be placed on the board
+            if(cellNumber < 24){
+                cellNumber += 1
+            }
             resetBoard()
         }
-        if (currentLevel < 5) {
+        if (currentRound < maxRounds) {
             currentNumber = 0
-            currentLevel += 1
+            currentRound += 1
             resetBoard()
         }
 
-        //Reset board
     }
+
 
     private fun restartGame() {
         //set level to 0
         binding.lifeOne.visibility = View.VISIBLE
         binding.lifeTwo.visibility = View.VISIBLE
         binding.lifeThree.visibility = View.VISIBLE
-        currentLevel = 0
-        cellNumber = 6
+        currentRound = 0
+        cellNumber = 4
         currentNumber = 0
         currentScore = 0
         lives = 3
@@ -226,7 +258,7 @@ class MemoryGameFragment : Fragment() {
     }
 
     private fun resetBoard() {
-        val boardStartTime = "0:00"
+        val boardStartTime = "0"
         binding.gameTimer.text = boardStartTime
         for (i in binding.gameGridView) {
             val cell = i as? TextView
@@ -239,7 +271,12 @@ class MemoryGameFragment : Fragment() {
 
     private fun gameOver() {
         //Dialog to play again
-        countDownTimer.cancel()
+        //------------------------------------------------------
+        testCountDownTimer?.cancel()
+        testCountDownTimer = null
+//        countDownTimer.cancel()
+        //------------------------------------------------------
+
         //Check if score is new high score and update accordingly
         viewModel.updateHighScore(currentScore)
         val gameOverDialog = GameOverDialogBinding.inflate(LayoutInflater.from(context))
@@ -266,6 +303,18 @@ class MemoryGameFragment : Fragment() {
         }
     }
 
+    private fun getGameSeconds(): Int{
+        return when{
+            cellNumber <= 6 -> 5
+            cellNumber in 7..9 -> 9
+            cellNumber in 10..13 -> 10
+            cellNumber in 14..17 -> 15
+            else -> 17
+        }
+    }
+
+
+
 
     private fun closeGame() {
         findNavController().popBackStack()
@@ -273,9 +322,12 @@ class MemoryGameFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Toast.makeText(context, "Closed", Toast.LENGTH_SHORT).show()
-        countDownTimer.cancel()
-        pregameTimer.cancel()
+        testCountDownTimer?.cancel()
+        testCountDownTimer = null
+
+        pregameCountDownTimer?.cancel()
+        pregameCountDownTimer = null
+
         _binding = null
     }
 
