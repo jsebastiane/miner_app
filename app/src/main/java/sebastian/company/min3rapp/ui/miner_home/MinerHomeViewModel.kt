@@ -74,8 +74,10 @@ class MinerHomeViewModel : ViewModel() {
                         val code = e.code
                         val details = e.details
                         Log.d("CloudError", details.toString())
+                        _requestState.value = DataListState(error = "Server side error")
+                    }else{
+                        _requestState.value = DataListState(error = "Error retrieving articles")
                     }
-                    _requestState.value = DataListState(error = "Error retrieving articles")
                 }else{
                     if(task.result.isNotEmpty()){
                         introduceAds(task.result)

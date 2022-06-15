@@ -58,6 +58,7 @@ class MyNewsFragment : Fragment(), MyNewsAction {
             layoutManager = gridLayoutManager
         }
 
+
         binding.addTopicsButton.setOnClickListener {
             val action = ViewPagerFragmentDirections.actionViewPagerFragmentToNewsTagsFragment()
             Navigation.findNavController(binding.root).navigate(action)
@@ -67,9 +68,9 @@ class MyNewsFragment : Fragment(), MyNewsAction {
             val chip = group.findViewById<Chip>(checkedIds[0])
             if(chip.isChecked){
                 if(chip.text == "ALL"){
-//                    viewModel.getArticlesCf(myTopics)
+                    viewModel.getArticlesCf(myTopics)
                 }else{
-//                    viewModel.getArticlesCf(chip.text.toString())
+                    viewModel.getArticlesCf(chip.text.toString())
                 }
             }
 
@@ -85,7 +86,7 @@ class MyNewsFragment : Fragment(), MyNewsAction {
         //Add swipe to refresh - get chip selected and refresh
 
 
-        //When positiont equals firstItem(0), newsItem(1), NewsBanner(2), or adsBanner(3) - adjust
+        //When position equals firstItem(0), newsItem(1), NewsBanner(2), or adsBanner(3) - adjust
         //the gridSpan size accordingly
         //Grid is initialized with spanCount of 2
         //CarouselView takes up both spaces, the second row news items take 1 each, and the banners
@@ -108,13 +109,13 @@ class MyNewsFragment : Fragment(), MyNewsAction {
         //If no topics are found show option to add, otherwise start loading articles with topics
         viewModel.myTopics.observe(viewLifecycleOwner, Observer { topics ->
             if (topics.isNullOrEmpty()) {
-                binding.articleBannersRecycler.visibility = View.GONE
+                binding.refreshLayout.visibility = View.GONE
                 binding.chipScrollView.visibility = View.GONE
                 binding.addTopicsLayout.visibility = View.VISIBLE
 
             } else {
                 binding.chipScrollView.visibility = View.VISIBLE
-                binding.articleBannersRecycler.visibility = View.VISIBLE
+                binding.refreshLayout.visibility = View.VISIBLE
                 binding.addTopicsLayout.visibility = View.GONE
                 myTopics = topics
                 createNewsTags()
@@ -137,6 +138,7 @@ class MyNewsFragment : Fragment(), MyNewsAction {
                 if (it.error.isEmpty()) {
                     if(it.articles.isNotEmpty()){
                         newsBannerRecyclerAdapter.setData(it.articles)
+                        binding.articleBannersRecycler.scrollToPosition(0)
                     }
                 } else {
                     Toast.makeText(context, it.error, Toast.LENGTH_SHORT).show()
@@ -149,7 +151,7 @@ class MyNewsFragment : Fragment(), MyNewsAction {
 
     //Load ads and send to ViewModel
     private fun createAdLoader() {
-        adLoader = AdLoader.Builder(requireContext(), "ca-app-pub-3940256099942544/2247696110")
+        adLoader = AdLoader.Builder(requireContext(), "ca-app-pub-1348069125113037/5204101273")
             .forNativeAd { ad: NativeAd ->
                 if (viewLifecycleOwner.lifecycle.currentState == Lifecycle.State.DESTROYED) {
                     ad.destroy()

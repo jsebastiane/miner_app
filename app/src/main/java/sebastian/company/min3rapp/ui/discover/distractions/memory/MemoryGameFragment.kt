@@ -15,6 +15,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.interstitial.InterstitialAd
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -30,6 +33,7 @@ class MemoryGameFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: MemoryGameViewModel by viewModels()
     private lateinit var userPreferences: UserPrefs
+    private lateinit var mAdView: AdView
 
     //gameTimer
     private var testCountDownTimer: Job? = null
@@ -281,11 +285,15 @@ class MemoryGameFragment : Fragment() {
         viewModel.updateHighScore(currentScore)
         val gameOverDialog = GameOverDialogBinding.inflate(LayoutInflater.from(context))
         activity?.let {
+            mAdView = gameOverDialog.adView
+            val adRequest = AdRequest.Builder().build()
+            mAdView.loadAd(adRequest)
             val builder = AlertDialog.Builder(it)
             builder.setView(gameOverDialog.root)
 
             val dialog = builder.create()
             gameOverDialog.playAgainButton.setOnClickListener {
+
                 restartGame()
                 dialog.dismiss()
             }

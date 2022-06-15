@@ -1,5 +1,13 @@
 package sebastian.company.min3rapp.common
 
+import android.content.Context
+import android.graphics.ColorFilter
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import sebastian.company.min3rapp.R
 import java.text.DecimalFormat
 
 fun formatPrice(price: Double) : String{
@@ -42,6 +50,8 @@ fun formatMktCap(marketCap: Long) : String{
 }
 
 fun Double.formatPercentage() = "%.2f%%".format(this)
+
+
 
 
 

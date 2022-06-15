@@ -76,8 +76,10 @@ class MyNewsViewModel(application: Application): AndroidViewModel(application){
                         val code = e.code
                         val details = e.details
                         Log.d("CloudError", details.toString())
+                        _requestState.value = DataListState(error = "Server side error")
+                    }else{
+                        _requestState.value = DataListState(error = "Error retrieving articles")
                     }
-                    _requestState.value = DataListState(error = "Error retrieving articles")
                 }else{
                     //only if ads are not empty and articles is not empty do we introduce ads
                     if(task.result.isNotEmpty()){
@@ -105,7 +107,7 @@ class MyNewsViewModel(application: Application): AndroidViewModel(application){
                 val articles = data.toMutableList()
                 for(i in 0 until adsState.ads.size){
                     //placing ad every 4 articles
-                    val index = (i + 1) * 5
+                    val index = (i + 1) * 6
                     articles.add(index = index, DataArticle(nativeAd = adsState.ads[i]))
                 }
                 _requestState.value = DataListState(articles = articles)

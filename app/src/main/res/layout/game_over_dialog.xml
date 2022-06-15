@@ -5,19 +5,20 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient_stroke_rect">
 
+
     <TextView
         android:id="@+id/textView"
         style="@style/WhiteTextBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
         android:text="GAME OVER"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adView"
         app:layout_constraintVertical_bias="1.0" />
 
     <TextView
@@ -25,12 +26,15 @@
         style="@style/WhiteTextLight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="32dp"
         android:text="Play Again?"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline17"
+        app:layout_constraintBottom_toTopOf="@+id/playAgainButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline17"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/playAgainButton"
@@ -74,5 +78,20 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.5" />
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-1348069125113037/5327498000"
+        android:layout_width="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

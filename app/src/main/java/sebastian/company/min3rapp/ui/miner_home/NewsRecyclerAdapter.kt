@@ -7,8 +7,10 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.ads.nativead.NativeAd
 import sebastian.company.min3rapp.R
+
 import sebastian.company.min3rapp.databinding.HomePageAdsBinding
 import sebastian.company.min3rapp.databinding.NewsItemBinding
 import sebastian.company.min3rapp.domain.model.DataArticle
@@ -45,10 +47,12 @@ class NewsRecyclerAdapter(val actions: NewsAction)
                 val sourceAndDate = "$newsSource | ${article.publishedAt}"
                 newsBinding.newsHeadline.text = article.title
                 newsBinding.newsSource.text = sourceAndDate
+
                 Glide.with(newsBinding.root)
                     .load(article.urlToImage)
                     .placeholder(R.drawable.img_placeholder)
                     .into(newsBinding.newsImage)
+
                 newsBinding.root.setOnClickListener {
                     actions.onClick(article)
                 }

@@ -62,10 +62,10 @@ class HomeFragment : Fragment(), NewsAction {
             layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         }
 
-//        viewModel.getArticlesCf()
+        viewModel.getArticlesCf()
 
         binding.refreshLayout.setOnRefreshListener {
-//            viewModel.getArticlesCf()
+            viewModel.getArticlesCf()
         }
 
     }
@@ -95,7 +95,7 @@ class HomeFragment : Fragment(), NewsAction {
     }
 
     private fun createAdLoader() {
-        adLoader = AdLoader.Builder(requireContext(), "ca-app-pub-3940256099942544/2247696110")
+        adLoader = AdLoader.Builder(requireContext(), "ca-app-pub-1348069125113037/5204101273")
             .forNativeAd { ad: NativeAd ->
                 if (viewLifecycleOwner.lifecycle.currentState == Lifecycle.State.DESTROYED) {
                     ad.destroy()
