@@ -50,7 +50,7 @@ class MyNewsFragment : Fragment(), MyNewsAction {
 
         val gridLayoutManager = GridLayoutManager(context, 2)
         createAdLoader()
-        adLoader.loadAds(AdRequest.Builder().build(), 3)
+//        adLoader.loadAds(AdRequest.Builder().build(), 3)
         observeViewModel()
 
         binding.articleBannersRecycler.apply {
@@ -66,13 +66,13 @@ class MyNewsFragment : Fragment(), MyNewsAction {
 
         binding.tagsChipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
             val chip = group.findViewById<Chip>(checkedIds[0])
-            if(chip.isChecked){
-                if(chip.text == "ALL"){
-                    viewModel.getArticlesCf(myTopics)
-                }else{
-                    viewModel.getArticlesCf(chip.text.toString())
-                }
-            }
+//            if(chip.isChecked){
+//                if(chip.text == "ALL"){
+//                    viewModel.getArticlesCf(myTopics)
+//                }else{
+//                    viewModel.getArticlesCf(chip.text.toString())
+//                }
+//            }
 
         }
 
@@ -150,6 +150,8 @@ class MyNewsFragment : Fragment(), MyNewsAction {
 
 
     //Load ads and send to ViewModel
+//ca-app-pub-3940256099942544/2247696110
+//
     private fun createAdLoader() {
         adLoader = AdLoader.Builder(requireContext(), "ca-app-pub-1348069125113037/5204101273")
             .forNativeAd { ad: NativeAd ->
@@ -157,7 +159,7 @@ class MyNewsFragment : Fragment(), MyNewsAction {
                     ad.destroy()
                     return@forNativeAd
                 }
-                if (activity!!.isDestroyed) {
+                if (requireActivity().isDestroyed) {
                     ad.destroy()
                     return@forNativeAd
                 } else {

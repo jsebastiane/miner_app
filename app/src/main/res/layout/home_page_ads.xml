@@ -85,15 +85,15 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="4dp"
+                android:layout_marginBottom="12dp"
                 android:backgroundTint="@color/purple_middle"
                 android:paddingHorizontal="8dp"
-                android:layout_marginBottom="12dp"
                 android:paddingVertical="2dp"
                 android:text="Action"
                 android:textAllCaps="false"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/adChoicesView2"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -114,6 +114,14 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/adMedia"
                 app:layout_constraintVertical_bias="0.0" />
+
+            <com.google.android.gms.ads.nativead.AdChoicesView
+                android:id="@+id/adChoicesView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

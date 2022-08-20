@@ -6,8 +6,10 @@ import sebastian.company.min3rapp.data.remote.dto.articles.SourceDto
 
 data class Article (
     val author: String? = null,
-    val content: String? = null,
-    val description: String? = null,
+//    //DO NOT NEED CONTENT
+//    val content: String? = null,
+//    //DO NOT NEED DESCRIPTION
+//    val description: String? = null,
     val publishedAt: String? = null,
     val sourceDto: SourceDto? = null,
     val title: String? = null,

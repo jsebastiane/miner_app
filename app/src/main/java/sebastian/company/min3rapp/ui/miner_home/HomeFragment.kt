@@ -53,7 +53,7 @@ class HomeFragment : Fragment(), NewsAction {
         super.onViewCreated(view, savedInstanceState)
 
         createAdLoader()
-        adLoader.loadAds(AdRequest.Builder().build(), 3)
+//        adLoader.loadAds(AdRequest.Builder().build(), 3)
 
         observeViewModel()
 
@@ -62,10 +62,10 @@ class HomeFragment : Fragment(), NewsAction {
             layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         }
 
-        viewModel.getArticlesCf()
+//        viewModel.getArticlesCf() -------------
 
         binding.refreshLayout.setOnRefreshListener {
-            viewModel.getArticlesCf()
+//            viewModel.getArticlesCf() -------------------
         }
 
     }
@@ -101,7 +101,7 @@ class HomeFragment : Fragment(), NewsAction {
                     ad.destroy()
                     return@forNativeAd
                 }
-                if (activity!!.isDestroyed) {
+                if (requireActivity().isDestroyed) {
                     ad.destroy()
                     return@forNativeAd
                 } else {

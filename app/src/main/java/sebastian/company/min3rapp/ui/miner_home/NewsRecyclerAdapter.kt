@@ -110,6 +110,9 @@ class NewsRecyclerAdapter(val actions: NewsAction)
         val adActionButton = adView.adAction
         val iconView = adView.adAppIcon
         val adBody = adView.adBody
+        val adChoices = adView.adChoicesView2
+
+        adView.root.adChoicesView = adChoices
 
 
         //If ad has icon do not show Image - if no icon show image

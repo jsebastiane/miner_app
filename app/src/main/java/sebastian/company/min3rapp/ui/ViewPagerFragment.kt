@@ -14,6 +14,7 @@ import sebastian.company.min3rapp.ui.discover.DiscoverFragment
 import sebastian.company.min3rapp.ui.miner_home.HomeFragment
 import sebastian.company.min3rapp.ui.my_news.MyNewsFragment
 import sebastian.company.min3rapp.ui.crypto_data.DataFragment
+import sebastian.company.min3rapp.ui.discuss.DiscussFragment
 
 
 class ViewPagerFragment : Fragment() {
@@ -22,6 +23,7 @@ class ViewPagerFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var viewPager: ViewPager2
     private var isOnMyNews: Boolean = false
+    private var isOnDiscover: Boolean = false
 
 
     override fun onCreateView(
@@ -34,7 +36,8 @@ class ViewPagerFragment : Fragment() {
 
         val fragmentList = arrayListOf<Fragment>(
             HomeFragment(),
-            MyNewsFragment(),
+//            MyNewsFragment(),
+            DiscussFragment(),
             DataFragment(),
             DiscoverFragment()
         )
@@ -49,15 +52,19 @@ class ViewPagerFragment : Fragment() {
         viewPager = binding.viewPager
         viewPager.adapter = adapter
         viewPager.offscreenPageLimit = 1
+        viewPager.isUserInputEnabled = false
 
         viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback(){
 
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                if (position == 1){
-                    updateOptionsMenu(true)
-                }else{
-                    updateOptionsMenu(false)
+                when (position) {
+                    3 -> {
+                        updateOptionsMenu(3)
+                    }
+                    else -> {
+                        updateOptionsMenu(-1)
+                    }
                 }
 
             }
@@ -71,7 +78,8 @@ class ViewPagerFragment : Fragment() {
                     tab.text = "Home"
                 }
                 1 -> {
-                    tab.text = "My News"
+//                    tab.text = "My News"
+                    tab.text = "Discuss"
                 }
                 2 -> {
                     tab.text = "Data"
@@ -86,15 +94,24 @@ class ViewPagerFragment : Fragment() {
         return view
     }
 
-    private fun updateOptionsMenu(myNewsPage: Boolean){
-        isOnMyNews = myNewsPage
+    private fun updateOptionsMenu(page: Int){
+        when(page){
+            3 -> {isOnDiscover = true
+                isOnMyNews = false}
+            else -> {isOnDiscover = false
+                isOnMyNews = false}
+        }
         requireActivity().invalidateOptionsMenu()
+
+
     }
+
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
-            R.id.edit_action ->{
-                val action = ViewPagerFragmentDirections.actionViewPagerFragmentToNewsTagsFragment()
+            R.id.info_action ->{
+                val action = ViewPagerFragmentDirections.actionViewPagerFragmentToContactPolicyFragment()
                 Navigation.findNavController(binding.root).navigate(action)
                 true
             }else -> super.onOptionsItemSelected(item)
@@ -112,8 +129,10 @@ class ViewPagerFragment : Fragment() {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        val item = menu.findItem(R.id.edit_action)
-        item.isVisible = isOnMyNews
+        val editItem = menu.findItem(R.id.edit_action)
+        val infoItem = menu.findItem(R.id.info_action)
+        editItem.isVisible = isOnMyNews
+        infoItem.isVisible = isOnDiscover
     }
 
 

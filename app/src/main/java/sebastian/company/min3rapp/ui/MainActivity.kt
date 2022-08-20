@@ -54,6 +54,14 @@ class MainActivity : AppCompatActivity() {
                 supportActionBar?.title = ""
                 binding.toolbarHeader.text = supportActionBar?.title
                 supportActionBar?.setDisplayShowTitleEnabled(false)
+            }else if(destination.displayName == "sebastian.company.min3rapp:id/discussDetailFragment") {
+                supportActionBar?.title = "comments"
+                binding.toolbarHeader.text = supportActionBar?.title
+                supportActionBar?.setDisplayShowTitleEnabled(false)
+            }else if(destination.displayName == "sebastian.company.min3rapp:id/commentDetailsFragment"){
+                supportActionBar?.title = "replies"
+                binding.toolbarHeader.text = supportActionBar?.title
+                supportActionBar?.setDisplayShowTitleEnabled(false)
             }else{
                 supportActionBar?.title = getString(R.string.app_name)
                 binding.toolbarHeader.text = supportActionBar?.title

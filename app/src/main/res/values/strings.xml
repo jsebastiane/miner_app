@@ -6,7 +6,11 @@
     <string name="prices">Prices</string>
     <string name="discover">Discover</string>
     <string name="tab_layout_des">navigate through fragments</string>
+    <string name="privacy_policy_hyperlink">For more information on our privacy policy visit the following link:\n<a href="https://github.com/yeomanblanc/MIN3R/blob/main/MIN3R_Privacy_Policy.md">Privacy Policy</a></string>
+    <string name="general_enquiries">For general enquiries about the MIN3R app please email ssebastianestrada@gmail.com or whatsapp: +502 35694358</string>
     <string name="asset_prices">Asset Prices</string>
     <string name="coins_data_error">Failed to get coins data</string>
     <string name="asset_prices_description">Daily tracker of top 100 coins</string>
+    <string name="important_notice">MIN3R does not have any affiliations with the entities listed on our Discover page.
+        Visits to these websites are made at the user\'s own discretion </string>
 </resources>

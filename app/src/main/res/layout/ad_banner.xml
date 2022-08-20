@@ -72,7 +72,7 @@
             android:maxLength="25"
             android:maxLines="1"
             android:text="-"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/adChoicesView"
             app:layout_constraintStart_toStartOf="@+id/guideline8"
             app:layout_constraintTop_toBottomOf="@id/ad_app_icon" />
 
@@ -114,15 +114,24 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginBottom="4dp"
             android:maxLength="90"
             android:maxLines="3"
-            android:textSize="12sp"
             android:text="-"
+            android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@+id/ad_action"
-            app:layout_constraintEnd_toEndOf="@+id/ad_headline"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/ad_headline"
             app:layout_constraintTop_toBottomOf="@+id/ad_headline" />
+
+        <com.google.android.gms.ads.nativead.AdChoicesView
+            android:id="@+id/adChoicesView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

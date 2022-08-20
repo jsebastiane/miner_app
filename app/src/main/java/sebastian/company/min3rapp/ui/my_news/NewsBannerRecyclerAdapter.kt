@@ -166,6 +166,9 @@ class NewsBannerRecyclerAdapter(val action: MyNewsAction)
         val adActionButton = adView.adAction
         val headlineView = adView.adHeadline
         val adBody = adView.adBody
+        val adChoice = adView.adChoicesView
+
+        adView.root.adChoicesView = adChoice
 
 
         if (ad.headline == null){

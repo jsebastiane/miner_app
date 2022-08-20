@@ -7,8 +7,8 @@ import java.text.SimpleDateFormat
 
 data class ArticleDto(
     val author: String? = null,
-    val content: String? = null,
-    val description: String? = null,
+//    val content: String? = null,
+//    val description: String? = null,
     val publishedAt: String? = null,
     val source: SourceDto? = null,
     val title: String? = null,
@@ -28,8 +28,6 @@ fun ArticleDto.toArticle(): Article {
 
     return Article(
         author = author,
-        content = content,
-        description = description,
         publishedAt = date,
         sourceDto = source,
         title = title,

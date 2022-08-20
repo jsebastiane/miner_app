@@ -42,6 +42,16 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_viewPagerFragment_to_contactPolicyFragment"
+            app:destination="@id/contactPolicyFragment" />
+        <action
+            android:id="@+id/action_viewPagerFragment_to_discussDetailFragment"
+            app:destination="@id/discussDetailFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/newsDetailFragment"
@@ -88,4 +98,51 @@
         android:name="sebastian.company.min3rapp.ui.my_news.news_tags.NewsTagsFragment"
         android:label="fragment_news_tags"
         tools:layout="@layout/fragment_news_tags" />
+    <fragment
+        android:id="@+id/contactPolicyFragment"
+        android:name="sebastian.company.min3rapp.ui.policy.ContactPolicyFragment"
+        android:label="fragment_contact_policy"
+        tools:layout="@layout/fragment_contact_policy" />
+    <fragment
+        android:id="@+id/discussDetailFragment"
+        android:name="sebastian.company.min3rapp.ui.discuss.DiscussDetailFragment"
+        android:label="fragment_discuss_detail"
+        tools:layout="@layout/fragment_discuss_detail">
+
+        <argument
+            android:name="articleId"
+            android:defaultValue="0"
+            app:argType="string"/>
+
+        <argument
+            android:name="articleTitle"
+            android:defaultValue="0"
+            app:argType="string"/>
+
+        <argument
+            android:name="imageUrl"
+            android:defaultValue="0"
+            app:argType="string"/>
+        <action
+            android:id="@+id/action_discussDetailFragment_to_commentDetailsFragment"
+            app:destination="@id/commentDetailsFragment"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/commentDetailsFragment"
+        android:name="sebastian.company.min3rapp.ui.discuss.CommentDetailsFragment"
+        android:label="fragment_comment_details"
+        tools:layout="@layout/fragment_comment_details">
+
+        <argument
+            android:name="focusedComment"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true"
+            />
+    </fragment>
 </navigation>

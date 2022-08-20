@@ -132,4 +132,28 @@
         <item name="android:textSize">28sp</item>
 
     </style>
+
+    <style name="DarkTextBold">
+        <item name="fontFamily">@font/gilroy_extrabold</item>
+        <item name="android:textColor">@color/brand_darkblue_variant</item>
+    </style>
+
+    <style name="DarkTextLight">
+        <item name="fontFamily">@font/gilroy_light</item>
+        <item name="android:textColor">@color/brand_darkblue_variant</item>
+    </style>
+
+    <style name="ToolbarCollapse">
+        <item name="fontFamily">@font/gilroy_extrabold</item>
+        <item name="android:textColor">@color/brand_white</item>
+        <item name="android:textSize">28sp</item>
+
+    </style>
+
+    <style name="ToolBarExpand">
+        <item name="fontFamily">@font/gilroy_extrabold</item>
+        <item name="android:textColor">@color/brand_white</item>
+        <item name="android:textSize">32sp</item>
+    </style>
+
 </resources>
