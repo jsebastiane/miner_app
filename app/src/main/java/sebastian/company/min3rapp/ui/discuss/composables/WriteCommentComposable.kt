@@ -83,6 +83,7 @@ sendComment: (String) -> Unit, isLoading: Boolean){
                     } else {
                         visible = false
                         keyboardController?.hide()
+                        text = ""
                     }
                 },
             colors = TextFieldDefaults.textFieldColors(

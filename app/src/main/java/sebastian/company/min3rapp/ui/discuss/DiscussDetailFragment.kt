@@ -18,6 +18,7 @@ class DiscussDetailFragment : Fragment() {
     private var articleIdFrag: String? = null
     private var articleTitle: String? = null
     private var articleImageUrl: String? = null
+    private var articleUrl: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +27,7 @@ class DiscussDetailFragment : Fragment() {
             articleIdFrag = DiscussDetailFragmentArgs.fromBundle(it).articleId
             articleTitle = DiscussDetailFragmentArgs.fromBundle(it).articleTitle
             articleImageUrl = DiscussDetailFragmentArgs.fromBundle(it).imageUrl
+            articleUrl = DiscussDetailFragmentArgs.fromBundle(it).articleUrl
         }
 
     }
@@ -42,13 +44,19 @@ class DiscussDetailFragment : Fragment() {
                     imageUrl = articleImageUrl!!,
                     navigateToComment = {comment ->
                         navigateToComment(comment)
-                    })
+                    },
+                viewArticle = {navigateToWebView()})
             }
         }
     }
 
     private fun navigateToComment(comment: ForumComment){
         val action = DiscussDetailFragmentDirections.actionDiscussDetailFragmentToCommentDetailsFragment(comment.commentId)
+        findNavController().navigate(action)
+    }
+
+    private fun navigateToWebView(){
+        val action = DiscussDetailFragmentDirections.actionDiscussDetailFragmentToNewsWebFragment(articleUrl!!)
         findNavController().navigate(action)
     }
 

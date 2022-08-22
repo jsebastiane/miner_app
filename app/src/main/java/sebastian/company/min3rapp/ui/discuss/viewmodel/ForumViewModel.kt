@@ -6,9 +6,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 import sebastian.company.min3rapp.common.ForumDataType
+import sebastian.company.min3rapp.domain.model.User
 import sebastian.company.min3rapp.domain.model.discuss.*
 
 class ForumViewModel(private val dataType: ForumDataType,
@@ -18,7 +25,13 @@ class ForumViewModel(private val dataType: ForumDataType,
     private val firestoreDb = FirebaseFirestore.getInstance()
     private val forumPath = firestoreDb.collection("forumTopics")
 
+    private val currentUser: String? = Firebase.auth.currentUser?.uid
+
+
     var addCommentState by mutableStateOf<AddCommentState>(AddCommentState())
+        private set
+
+    var voteState by mutableStateOf<VoteState>(VoteState())
         private set
 
     var forumArticlesState by mutableStateOf<ForumArticleState>(ForumArticleState())
@@ -30,8 +43,12 @@ class ForumViewModel(private val dataType: ForumDataType,
     var forumRepliesState by mutableStateOf<ForumCommentsState>(ForumCommentsState())
         private set
 
+    private var user: User? = null
+
+
 
     init {
+        getUser()
         when(dataType){
             ForumDataType.FORUM_TOPICS -> getForumTopics()
             ForumDataType.FORUM_COMMENT -> getForumComments()
@@ -39,6 +56,20 @@ class ForumViewModel(private val dataType: ForumDataType,
         }
     }
 
+    private fun getUser(){
+        currentUser?.let { id ->
+            firestoreDb.collection("users").document(id).get()
+                .addOnSuccessListener { document ->
+                    user = document.toObject<User>()
+                }.addOnFailureListener {
+                    Log.d("UserRetrieval", "Failed")
+                }
+
+        }
+        if(currentUser == null){
+            Log.d("UserData", "No user found")
+        }
+    }
 
 
     private fun getForumTopics(){
@@ -61,7 +92,7 @@ class ForumViewModel(private val dataType: ForumDataType,
 
 
     private fun getForumComments(){
-        forumCommentsState = ForumCommentsState(loading = true)
+        forumCommentsState = ForumCommentsState(loading = true, forumComments = forumCommentsState.forumComments)
         val tempList = mutableListOf<ForumComment>()
         articleId?.let {docId ->
             forumPath.document(docId).collection("comments")
@@ -71,6 +102,7 @@ class ForumViewModel(private val dataType: ForumDataType,
                         val comment = doc.toObject<ForumComment>()
                         tempList.add(comment)
                     }
+
                     forumCommentsState = ForumCommentsState(forumComments = tempList)
 
                 }
@@ -110,7 +142,7 @@ class ForumViewModel(private val dataType: ForumDataType,
                 .collection("comments")
                 .document()
 
-            newComment.set(ForumComment(commentId = newComment.id, comment))
+            newComment.set(ForumComment(commentId = newComment.id, text = comment, timePosted = Timestamp.now()))
                 .addOnSuccessListener {
                     addCommentState = AddCommentState(success = true)
                     getForumComments()
@@ -122,8 +154,86 @@ class ForumViewModel(private val dataType: ForumDataType,
 
     }
 
+
+
     private fun addCommentReply(){
 
+    }
+
+    //************************ DO NOT UPDATE COMMENTS LIST AFTER VOTE *************************
+
+    //vote is current reaction to certain comment (1,0,-1)
+    //shardVote is the absolute effect of downvoting or upvoting which can be (2,1,0,-1,-2)
+    fun commentVote(key: String, vote: Int, shardVote: Int){
+        //Random shard allocator cod here!
+        //Check size of currentReactionsMap -> can't exceed 4000
+        if(currentUser != null && articleId != null){
+            val userDB = firestoreDb.collection("users").document(currentUser)
+//            val randomShard = FirestoreDb.collection("forumTopics")
+//                .document(articleId).collection("votes").document("vote$")
+
+            when(vote){
+                0 -> {
+                    userDB.set(mapOf("currentReactionsMap" to mapOf(key to FieldValue.delete())), SetOptions.merge())
+                        .addOnFailureListener {
+                            Log.d("UserReaction", "Failed")
+                        }
+                    }
+                else -> {
+                    userDB.set(mapOf("currentReactionsMap" to mapOf(key to vote)), SetOptions.merge())
+                        .addOnFailureListener {
+                            Log.d("UserReaction", "Failed")
+                        }
+                    }
+                }
+
+            //shard.increment(shardVote)
+            println(shardVote.toString())
+
+        }else{
+            voteState = VoteState(success = false, error = "Failed to send vote")
+
+        }
+    }
+
+    fun upvoteComment(vote: Int, key: String){
+        //Add comment id to User's votes - {commentId: -1 / +1}
+        if (currentUser != null){
+            firestoreDb.collection("users").document(currentUser)
+                .update("currentReactionsMap", mapOf("FieldName.${key}" to 1))
+        }else{
+            voteState = VoteState(success = false, error = "Failed to send vote")
+        }
+
+        //Update random shard with Increment(vote)
+    }
+
+    fun downVoteComment(vote: Int, key: String){
+        //Add comment id to User's votes - {commentId: -1 / +1}
+        if (currentUser != null){
+            firestoreDb.collection("users").document(currentUser)
+                .update("currentReactionsMap", mapOf("FieldName.${key}" to -1))
+        }else{
+            voteState = VoteState(success = false, error = "Failed to send vote")
+        }
+        //Update random shard with Increment(vote)
+    }
+
+    fun removeVoteComment(key: String){
+        if (currentUser != null){
+            firestoreDb.collection("users").document(currentUser)
+                .update("currentReactionsMap", mapOf("FieldName.${key}" to FieldValue.delete()))
+        }else{
+            voteState = VoteState(success = false, error = "Failed to send vote")
+        }
+
+        //Increment() on shard
+    }
+
+    private fun sortForumComments(sortType: Int){
+        when(sortType){
+           0 -> {}
+        }
     }
 
 }

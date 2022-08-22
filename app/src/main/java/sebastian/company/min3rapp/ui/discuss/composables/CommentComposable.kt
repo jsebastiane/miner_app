@@ -111,6 +111,6 @@ fun CommentCompose(comment: ForumComment){
 @Preview
 @Composable
 fun TestComment(){
-    CommentCompose(comment = ForumComment("201931", "This is a cool " +
+    CommentCompose(comment = ForumComment("","201931", "This is a cool " +
             "article are there more like this one?", 0, 23))
 }

@@ -37,7 +37,8 @@ class DiscussFragment : Fragment() {
     private fun navigateToDiscussDetail(forumArticle: ForumArticle){
 
         val action = ViewPagerFragmentDirections.actionViewPagerFragmentToDiscussDetailFragment(
-            forumArticle.articleId, forumArticle.article.title!!, forumArticle.article.urlToImage!!)
+            forumArticle.articleId, forumArticle.article.title!!, forumArticle.article.urlToImage!!,
+        forumArticle.article.url!!)
         findNavController().navigate(action)
     }
 

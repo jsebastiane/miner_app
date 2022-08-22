@@ -18,6 +18,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -46,9 +47,11 @@ fun DiscussDetailsMain(
     articleTitle: String,
     imageUrl: String,
     navigateToComment: (ForumComment) -> Unit,
+    viewArticle: () -> Unit,
     viewModel: ForumViewModel = viewModel(
         factory =
-        ForumViewModelFactory(ForumDataType.FORUM_COMMENT, articleId, null)
+        ForumViewModelFactory(ForumDataType.FORUM_COMMENT, articleId, null),
+
     )
 ) {
 
@@ -81,7 +84,9 @@ fun DiscussDetailsMain(
                 .fillMaxSize()
         ) {
 
-            SeeArticleView()
+            SeeArticleView(seeArticle = {
+                viewArticle()
+            })
 
 //                    AnimatedVisibility(visible = visible) {
 //                        ErrorComments(modifier = Modifier.fillMaxWidth().weight(1F))
@@ -99,6 +104,9 @@ fun DiscussDetailsMain(
                     articleTitle,
                     commentClicked = { item ->
                         navigateToComment(item)
+                    },
+                    propVote = {key, userStateVote, commentStateVotes ->
+                        viewModel.commentVote(key, userStateVote, commentStateVotes)
                     }
                 )
             } else {
@@ -183,8 +191,15 @@ fun ErrorComments(modifier: Modifier = Modifier) {
 @Composable
 fun ArticleComment(
     comment: ForumComment,
-    onCommentClicked: (ForumComment) -> Unit
+    onCommentClicked: (ForumComment) -> Unit,
+    //commentId, userVoteState, commentVoteState
+    onVote: (String, Int, Int) -> Unit
+
 ) {
+
+    var reaction by remember { mutableStateOf(comment.userReaction)}
+    var currentVotes by remember{ mutableStateOf(comment.votes)}
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -266,11 +281,38 @@ fun ArticleComment(
                     Image(
                         painter = painterResource(id = R.drawable.ic_upvote),
                         contentDescription = "upvote",
-                        modifier = Modifier.fillMaxWidth()
+                        colorFilter = ColorFilter.tint(
+                            if(reaction == 1) colorResource(id = R.color.brand_pink)
+                            else Color.LightGray
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                when (reaction) {
+                                    -1 -> {
+                                        reaction = 1
+                                        //The difference between -1 and 1 is 2 so we update current
+                                        // votes accordingly
+                                        currentVotes += 2
+                                        onVote(comment.commentId, 1, 2)
+                                    }
+                                    0 -> {
+                                        reaction = 1
+                                        currentVotes += 1
+                                        onVote(comment.commentId, 1, 1)
+                                    }
+                                    1 -> {
+                                        //Removing vote so reaction is 0 (1-1)
+                                        reaction = 0
+                                        currentVotes -= 1
+                                        onVote(comment.commentId, 0, -1)
+                                    }
+                                }
+                            }
                     )
 
                     Text(
-                        text = comment.votes.toString(),
+                        text = currentVotes.toString(),
                         style = Typography.caption,
                         textAlign = TextAlign.Center,
                         modifier = Modifier
@@ -281,8 +323,32 @@ fun ArticleComment(
 
                     Image(
                         painter = painterResource(id = R.drawable.ic_downvote),
-                        contentDescription = "upvote",
-                        modifier = Modifier.fillMaxWidth()
+                        contentDescription = "downvote",
+                        colorFilter = ColorFilter.tint(
+                            if(reaction == -1) colorResource(id = R.color.brand_pink)
+                            else Color.LightGray
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                when (reaction) {
+                                    -1 -> {
+                                        reaction = 0
+                                        currentVotes += 1
+                                        onVote(comment.commentId, 0, 1)
+                                    }
+                                    0 -> {
+                                        reaction = -1
+                                        currentVotes -= 1
+                                        onVote(comment.commentId, -1, -1)
+                                    }
+                                    1 -> {
+                                        reaction = -1
+                                        currentVotes -= 2
+                                        onVote(comment.commentId, -1, -2)
+                                    }
+                                }
+                            }
                     )
                 }
             }
@@ -304,7 +370,8 @@ fun ArticleComment(
 @Composable
 fun CommentSection(
     modifier: Modifier = Modifier, data: Map<Int, List<ForumComment>>, title: String,
-    commentClicked: (ForumComment) -> Unit
+    commentClicked: (ForumComment) -> Unit,
+    propVote: (String, Int, Int) -> Unit
 ) {
     CompositionLocalProvider(
         LocalOverscrollConfiguration provides null
@@ -325,6 +392,8 @@ fun CommentSection(
                 items(comments) { comment ->
                     ArticleComment(comment, onCommentClicked = { item ->
                         commentClicked(item)
+                    }, onVote = {key, userStateVote, commentStateVotes ->
+                        propVote(key, userStateVote, commentStateVotes)
                     })
                 }
             }
@@ -416,12 +485,13 @@ fun EmptySpaceView() {
 }
 
 @Composable
-fun SeeArticleView() {
+fun SeeArticleView(seeArticle: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp)
             .padding(end = 16.dp)
+
 
     ) {
         Box(
@@ -430,6 +500,9 @@ fun SeeArticleView() {
                 .border(0.5.dp, TransparentGrey, RoundedCornerShape(8.dp))
                 .background(colorResource(id = R.color.brand_darkblue_variant))
                 .align(alignment = Alignment.CenterEnd)
+                .clickable {
+                    seeArticle()
+                }
         ) {
             Text(
                 text = "See Article",

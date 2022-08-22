@@ -123,6 +123,11 @@
             android:name="imageUrl"
             android:defaultValue="0"
             app:argType="string"/>
+
+        <argument
+            android:name="articleUrl"
+            android:defaultValue=""
+            app:argType="string"/>
         <action
             android:id="@+id/action_discussDetailFragment_to_commentDetailsFragment"
             app:destination="@id/commentDetailsFragment"
@@ -130,6 +135,13 @@
             app:exitAnim="@android:anim/fade_out"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/action_discussDetailFragment_to_newsWebFragment"
+            app:destination="@id/newsWebFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
 
     </fragment>
     <fragment

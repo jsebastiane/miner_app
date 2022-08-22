@@ -83,7 +83,7 @@ fun fakeForumComments(): Map<Int, List<ForumComment>>{
     for(i in 0..150){
         if(i % 2 == 0) {
             tempList.add(
-                ForumComment("98192031",
+                ForumComment("","98192031",
                     "Problem is he has a large influence on people who are just now able to " +
                             "vote or will be able to soon",
                     142,
@@ -92,7 +92,7 @@ fun fakeForumComments(): Map<Int, List<ForumComment>>{
             )
         }else{
             tempList.add(
-                ForumComment("0918821412",
+                ForumComment("","0918821412",
                     "Well, technically 'crypto' isn't the technology. The technology is " +
                             "blockchain or DAG and it uses cryptography for security. Universities are teaching the technology - blockchain, not 'crypto'.\n" +
                             "The term 'crypto' in popular culture refers a combination of technologies consisting of complex systems",
@@ -112,7 +112,7 @@ fun fakeForumCommentsList(): List<ForumComment>{
     for(i in 0..10){
         if(i % 2 == 0) {
             tempList.add(
-                ForumComment("98192031",
+                ForumComment("","98192031",
                     "Problem is he has a large influence on people who are just now able to " +
                             "vote or will be able to soon",
                     142,
@@ -121,7 +121,7 @@ fun fakeForumCommentsList(): List<ForumComment>{
             )
         }else{
             tempList.add(
-                ForumComment("0918821412",
+                ForumComment("","0918821412",
                     "Well, technically 'crypto' isn't the technology. The technology is " +
                             "blockchain or DAG and it uses cryptography for security. Universities are teaching the technology - blockchain, not 'crypto'.\n" +
                             "The term 'crypto' in popular culture refers a combination of technologies consisting of complex systems",

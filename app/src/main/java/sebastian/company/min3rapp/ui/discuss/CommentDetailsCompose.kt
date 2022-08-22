@@ -39,7 +39,7 @@ fun CommentDetailsMain(){
                 .fillMaxWidth()
         ) {
             CommentFocused(
-                mainComment = ForumComment(
+                mainComment = ForumComment("",
                     "201931", "This is a cool " +
                             "article are there more like this one?", 0, 23
                 )
