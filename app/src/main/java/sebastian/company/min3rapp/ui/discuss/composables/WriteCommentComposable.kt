@@ -89,6 +89,7 @@ sendComment: (String) -> Unit, isLoading: Boolean){
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = colorResource(id = R.color.brand_darkblue_variant)
             ),
+            //This also removes focus from the textfield
             enabled = !isLoading,
             textStyle = Typography.body1,
             placeholder = { Text(text = "Write something...",

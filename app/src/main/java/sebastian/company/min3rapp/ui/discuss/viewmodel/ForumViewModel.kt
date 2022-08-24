@@ -103,7 +103,7 @@ class ForumViewModel(private val dataType: ForumDataType,
                         tempList.add(comment)
                     }
 
-                    forumCommentsState = ForumCommentsState(forumComments = tempList)
+                    checkCommentLikes(tempList)
 
                 }
         }
@@ -134,6 +134,7 @@ class ForumViewModel(private val dataType: ForumDataType,
         }
     }
 
+    //These comments must also be added to the Users comments collection
     fun addComment(comment: String){
         addCommentState = AddCommentState(loading = true)
         articleId?.let{ docId ->
@@ -154,11 +155,32 @@ class ForumViewModel(private val dataType: ForumDataType,
 
     }
 
+    fun addReply(comment: String){
+        addCommentState = AddCommentState(loading = true)
+        articleId?.let { docId ->
+            commendId?.let { commId ->
+                val newComment = forumPath.document(docId)
+                    .collection("comments")
+                    .document(commId)
+                    .collection("nestedReplies")
+                    .document()
 
+                newComment.set(ForumComment(poster = currentUser!!,
+                    commentId = commId,
+                    text = comment,
+                    timePosted = Timestamp.now()))
+                    .addOnSuccessListener {
+                        addCommentState = AddCommentState(success = true)
+                        getForumNestedReplies()
+                    }.addOnFailureListener {
+                        addCommentState = AddCommentState(failed = true)
+                    }
 
-    private fun addCommentReply(){
+            }
+        }
 
     }
+
 
     //************************ DO NOT UPDATE COMMENTS LIST AFTER VOTE *************************
 
@@ -196,44 +218,24 @@ class ForumViewModel(private val dataType: ForumDataType,
         }
     }
 
-    fun upvoteComment(vote: Int, key: String){
-        //Add comment id to User's votes - {commentId: -1 / +1}
-        if (currentUser != null){
-            firestoreDb.collection("users").document(currentUser)
-                .update("currentReactionsMap", mapOf("FieldName.${key}" to 1))
-        }else{
-            voteState = VoteState(success = false, error = "Failed to send vote")
-        }
-
-        //Update random shard with Increment(vote)
-    }
-
-    fun downVoteComment(vote: Int, key: String){
-        //Add comment id to User's votes - {commentId: -1 / +1}
-        if (currentUser != null){
-            firestoreDb.collection("users").document(currentUser)
-                .update("currentReactionsMap", mapOf("FieldName.${key}" to -1))
-        }else{
-            voteState = VoteState(success = false, error = "Failed to send vote")
-        }
-        //Update random shard with Increment(vote)
-    }
-
-    fun removeVoteComment(key: String){
-        if (currentUser != null){
-            firestoreDb.collection("users").document(currentUser)
-                .update("currentReactionsMap", mapOf("FieldName.${key}" to FieldValue.delete()))
-        }else{
-            voteState = VoteState(success = false, error = "Failed to send vote")
-        }
-
-        //Increment() on shard
-    }
 
     private fun sortForumComments(sortType: Int){
         when(sortType){
            0 -> {}
         }
+    }
+
+    //maybe run in a coroutine?
+    private fun checkCommentLikes(comments: List<ForumComment>){
+        val tempList = comments
+        if (user != null){
+            for(reaction in user!!.currentReactionsMap){
+                tempList.find { it.commentId == reaction.key }?.userReaction = reaction.value
+            }
+        }
+        forumCommentsState = ForumCommentsState(forumComments = tempList)
+
+
     }
 
 }

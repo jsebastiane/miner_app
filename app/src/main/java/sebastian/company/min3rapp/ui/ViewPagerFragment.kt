@@ -51,7 +51,7 @@ class ViewPagerFragment : Fragment() {
 
         viewPager = binding.viewPager
         viewPager.adapter = adapter
-        viewPager.offscreenPageLimit = 1
+        viewPager.offscreenPageLimit = 3
         viewPager.isUserInputEnabled = false
 
         viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback(){

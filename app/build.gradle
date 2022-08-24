@@ -9,6 +9,11 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+        storeFile file('/Users/sebastianestrada/Library/CloudStorage/GoogleDrive-sebastian.estradat@gmail.com/My Drive/CryptoProject/Min3rKeystore/min3KS')
+        }
+    }
     compileSdk 32
 
     defaultConfig {
@@ -22,6 +27,7 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+        signingConfig signingConfigs.release
     }
 
     buildFeatures{

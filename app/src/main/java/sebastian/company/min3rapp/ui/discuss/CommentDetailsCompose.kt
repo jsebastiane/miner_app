@@ -8,12 +8,14 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
+import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -21,16 +23,31 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import sebastian.company.min3rapp.R
+import sebastian.company.min3rapp.common.ForumDataType
 import sebastian.company.min3rapp.common.fakeForumComments
 import sebastian.company.min3rapp.common.fakeForumCommentsList
 import sebastian.company.min3rapp.domain.model.discuss.ForumComment
 import sebastian.company.min3rapp.ui.discuss.composables.CommentCompose
+import sebastian.company.min3rapp.ui.discuss.composables.WriteComment
+import sebastian.company.min3rapp.ui.discuss.viewmodel.ForumViewModel
+import sebastian.company.min3rapp.ui.discuss.viewmodel.ForumViewModelFactory
 import sebastian.company.min3rapp.ui.theme.TransparentGrey
 import sebastian.company.min3rapp.ui.theme.Typography
 
 @Composable
-fun CommentDetailsMain(){
+fun CommentDetailsMain(focusedComment: ForumComment,
+    articleId: String,
+viewModel: ForumViewModel = viewModel(
+    factory =
+        ForumViewModelFactory(ForumDataType.NESTED_REPLIES, articleId, focusedComment.commentId)
+)){
+
+    val repliesState = viewModel.forumRepliesState
+    val addCommentState = viewModel.addCommentState
+
+    val focusRequest = FocusRequester()
     Box(modifier = Modifier
         .fillMaxSize()
         .background(colorResource(id = R.color.brand_darkblue))) {
@@ -39,31 +56,34 @@ fun CommentDetailsMain(){
                 .fillMaxWidth()
         ) {
             CommentFocused(
-                mainComment = ForumComment("",
-                    "201931", "This is a cool " +
-                            "article are there more like this one?", 0, 23
-                )
+                mainComment = focusedComment
             )
             
-            NestedComments(nestedComments = fakeForumCommentsList())
+            NestedComments(nestedComments = repliesState.forumComments, modifier = Modifier.weight(1F))
 
-//            NoNestedComments()
+            if (addCommentState.loading){
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(2.dp),
+                    color = colorResource(id = R.color.brand_pink),
+                )
+            }else{
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(2.dp),
+                    progress = 1F,
+                    color = colorResource(id = R.color.brand_pink),
+                )
+            }
+
+            WriteComment(focusRequest = focusRequest, sendComment = {comment ->
+                viewModel.addReply(comment)
+            }, addCommentState.loading)
         }
 
-        FloatingActionButton(
-            onClick = { /*TODO*/ },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = 16.dp, bottom = 16.dp),
-            shape = RoundedCornerShape(10.dp),
-            backgroundColor = colorResource(id = R.color.brand_pink),
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_comments),
-                contentDescription = "comment",
-                tint = Color.White
-            )
-        }
+
     }
 
 }
@@ -175,21 +195,20 @@ fun CommentFocused(mainComment: ForumComment){
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NestedComments(nestedComments: List<ForumComment>){
+fun NestedComments(nestedComments: List<ForumComment>, modifier: Modifier = Modifier){
     CompositionLocalProvider(
         LocalOverscrollConfiguration provides null
     ) {
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 8.dp),
+            modifier = modifier.then(
+                Modifier
+                    .fillMaxSize()
+                    .padding(top = 8.dp)),
         ) {
 
                 itemsIndexed(nestedComments) { index, comment ->
                     CommentCompose(comment)
-                    if(index == nestedComments.size-1){
-                        Spacer(modifier = Modifier.height(60.dp))
-                    }
+
                 }
             }
         }
@@ -198,10 +217,5 @@ fun NestedComments(nestedComments: List<ForumComment>){
 
 
 
-@Preview
-@Composable
-fun CommentViewTest(){
-    CommentDetailsMain()
-}
 
 

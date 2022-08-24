@@ -156,5 +156,22 @@
             app:argType="string"
             app:nullable="true"
             />
+
+        <argument
+            android:name="focusedCommentText"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true"/>
+
+        <argument
+            android:name="focusedCommentPoster"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true"/>
+        <argument
+            android:name="articleId"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true"/>
     </fragment>
 </navigation>

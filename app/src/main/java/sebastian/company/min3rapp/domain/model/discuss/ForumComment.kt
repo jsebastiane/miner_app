@@ -10,7 +10,7 @@ data class ForumComment(
     val nestedReplies: Int = 0,
     val votes: Int = 0,
     val timePosted: Timestamp? = null,
-    val userReaction: Int = 0,
+    var userReaction: Int = 0,
     val timeSincePosted: String = ""
 
 

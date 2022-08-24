@@ -46,7 +46,7 @@ fun DiscussDetailsMain(
     articleId: String,
     articleTitle: String,
     imageUrl: String,
-    navigateToComment: (ForumComment) -> Unit,
+    navigateToComment: (ForumComment, String) -> Unit,
     viewArticle: () -> Unit,
     viewModel: ForumViewModel = viewModel(
         factory =
@@ -57,7 +57,6 @@ fun DiscussDetailsMain(
 
     val commentsState = viewModel.forumCommentsState
     val addCommentState = viewModel.addCommentState
-    var visible by remember { mutableStateOf(true) }
     val focusRequest = FocusRequester()
 //    val addCommentState = viewModelSec.addCommentState
 
@@ -103,7 +102,7 @@ fun DiscussDetailsMain(
                     mapOf(0 to listOf(), 1 to commentsState.forumComments),
                     articleTitle,
                     commentClicked = { item ->
-                        navigateToComment(item)
+                        navigateToComment(item, articleId)
                     },
                     propVote = {key, userStateVote, commentStateVotes ->
                         viewModel.commentVote(key, userStateVote, commentStateVotes)
@@ -198,6 +197,7 @@ fun ArticleComment(
 ) {
 
     var reaction by remember { mutableStateOf(comment.userReaction)}
+    //This will work when I implement sharding likes
     var currentVotes by remember{ mutableStateOf(comment.votes)}
 
     Box(

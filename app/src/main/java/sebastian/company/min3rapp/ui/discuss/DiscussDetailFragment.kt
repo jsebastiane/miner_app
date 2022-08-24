@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import sebastian.company.min3rapp.R
 import sebastian.company.min3rapp.domain.model.discuss.ForumArticle
@@ -42,16 +43,18 @@ class DiscussDetailFragment : Fragment() {
             setContent {
                 DiscussDetailsMain(articleId = articleIdFrag!!, articleTitle = articleTitle!!,
                     imageUrl = articleImageUrl!!,
-                    navigateToComment = {comment ->
-                        navigateToComment(comment)
+                    navigateToComment = {comment, articleId ->
+                        navigateToComment(comment, articleId)
                     },
                 viewArticle = {navigateToWebView()})
             }
         }
     }
 
-    private fun navigateToComment(comment: ForumComment){
-        val action = DiscussDetailFragmentDirections.actionDiscussDetailFragmentToCommentDetailsFragment(comment.commentId)
+    private fun navigateToComment(comment: ForumComment, articleId: String){
+        val action = DiscussDetailFragmentDirections.actionDiscussDetailFragmentToCommentDetailsFragment(comment.commentId,
+        comment.text, comment.poster, articleId)
+//        Navigation.findNavController(requireView()).navigate(action)
         findNavController().navigate(action)
     }
 
