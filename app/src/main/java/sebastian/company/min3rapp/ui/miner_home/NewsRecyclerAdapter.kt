@@ -13,14 +13,14 @@ import sebastian.company.min3rapp.R
 
 import sebastian.company.min3rapp.databinding.HomePageAdsBinding
 import sebastian.company.min3rapp.databinding.NewsItemBinding
-import sebastian.company.min3rapp.domain.model.DataArticle
+import sebastian.company.min3rapp.domain.model.Article
 import sebastian.company.min3rapp.ui.miner_home.components.ArticleDiffUtil
 import sebastian.company.min3rapp.ui.miner_home.components.NewsAction
 
 class NewsRecyclerAdapter(val actions: NewsAction)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>()
 {
-    private var oldArticleList = emptyList<DataArticle>()
+    private var oldArticleList = emptyList<Article>()
     private val adItem = 0
     private val newsItem = 1
 
@@ -42,9 +42,9 @@ class NewsRecyclerAdapter(val actions: NewsAction)
 
     inner class NewsItemViewHolder(private val newsBinding: NewsItemBinding): RecyclerView
         .ViewHolder(newsBinding.root){
-            fun bind(article: DataArticle){
+            fun bind(article: Article){
                 val newsSource = article.source?: ""
-                val sourceAndDate = "$newsSource | ${article.publishedAt}"
+                val sourceAndDate = "$newsSource | ${article.dbAddDate}"
                 newsBinding.newsHeadline.text = article.title
                 newsBinding.newsSource.text = sourceAndDate
 
@@ -61,7 +61,7 @@ class NewsRecyclerAdapter(val actions: NewsAction)
 
     inner class HomePageAdViewHolder(private val adsBinding: HomePageAdsBinding) : RecyclerView
         .ViewHolder(adsBinding.root){
-            fun bind(article: DataArticle){
+            fun bind(article: Article){
                 displayNativeAd(adsBinding.root, article.nativeAd!!)
             }
         }
@@ -90,7 +90,7 @@ class NewsRecyclerAdapter(val actions: NewsAction)
         }
     }
 
-    fun setData(newArticleList: List<DataArticle>){
+    fun setData(newArticleList: List<Article>){
         val diffUtil = ArticleDiffUtil(oldArticleList, newArticleList)
         val diffResults = DiffUtil.calculateDiff(diffUtil)
         oldArticleList = newArticleList

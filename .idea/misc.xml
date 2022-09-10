@@ -39,6 +39,23 @@
         <entry key="../../../../../layout/compose-model-1661129533486.xml" value="0.23395270270270271" />
         <entry key="../../../../../layout/compose-model-1661129571521.xml" value="0.23395270270270271" />
         <entry key="../../../../../layout/compose-model-1661237622427.xml" value="0.3592592592592593" />
+        <entry key="../../../../../layout/compose-model-1661737041364.xml" value="0.4046296296296296" />
+        <entry key="../../../../../layout/compose-model-1661921705193.xml" value="0.1" />
+        <entry key="../../../../../layout/compose-model-1662677759374.xml" value="0.3576858108108108" />
+        <entry key="../../../../../layout/compose-model-1662697565882.xml" value="1.0" />
+        <entry key="../../../../../layout/compose-model-1662699037319.xml" value="0.41574074074074074" />
+        <entry key="../../../../../layout/compose-model-1662700180556.xml" value="1.0" />
+        <entry key="../../../../../layout/compose-model-1662700304732.xml" value="0.28336755646817247" />
+        <entry key="../../../../../layout/compose-model-1662749705185.xml" value="0.3576858108108108" />
+        <entry key="../../../../../layout/compose-model-1662749936505.xml" value="0.41574074074074074" />
+        <entry key="../../../../../layout/compose-model-1662749961021.xml" value="0.41574074074074074" />
+        <entry key="../../../../../layout/compose-model-1662750634625.xml" value="0.3576858108108108" />
+        <entry key="../../../../../layout/compose-model-1662751587017.xml" value="0.41574074074074074" />
+        <entry key="../../../../../layout/compose-model-1662786269338.xml" value="0.41574074074074074" />
+        <entry key="../../../../../layout/compose-model-1662791645533.xml" value="0.33" />
+        <entry key="../../../../../layout/compose-model-1662791645539.xml" value="0.2243114406779661" />
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2185" />
+        <entry key="app/src/main/res/drawable-v24/ic_miner_launcher_foreground.xml" value="0.2185" />
         <entry key="app/src/main/res/drawable/back_button_drawable.xml" value="0.40520833333333334" />
         <entry key="app/src/main/res/drawable/brandblue_round.xml" value="0.41333333333333333" />
         <entry key="app/src/main/res/drawable/dark_leftbanner_bg.xml" value="0.41333333333333333" />
@@ -56,7 +73,10 @@
         <entry key="app/src/main/res/drawable/ic_bitcoin_symbol.xml" value="0.40520833333333334" />
         <entry key="app/src/main/res/drawable/ic_downvote.xml" value="0.2185" />
         <entry key="app/src/main/res/drawable/ic_error.xml" value="0.42102564102564105" />
+        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.2185" />
+        <entry key="app/src/main/res/drawable/ic_miner_launcher_foreground.xml" value="0.2185" />
         <entry key="app/src/main/res/drawable/ic_more_horiz.xml" value="0.40520833333333334" />
+        <entry key="app/src/main/res/drawable/ic_send.xml" value="0.2185" />
         <entry key="app/src/main/res/drawable/ic_timer.xml" value="0.40520833333333334" />
         <entry key="app/src/main/res/drawable/ic_upvote.xml" value="0.2185" />
         <entry key="app/src/main/res/drawable/my_bg.xml" value="0.40520833333333334" />
@@ -105,6 +125,8 @@
         <entry key="app/src/main/res/menu/newsdetails_toolbar.xml" value="0.4036458333333333" />
         <entry key="app/src/main/res/menu/toolbar_options.xml" value="0.4114583333333333" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3888888888888889" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2185" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_miner_launcher.xml" value="0.2185" />
       </map>
     </option>
   </component>

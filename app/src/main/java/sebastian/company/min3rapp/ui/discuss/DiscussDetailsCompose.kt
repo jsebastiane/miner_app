@@ -111,7 +111,7 @@ fun DiscussDetailsMain(
             } else {
                 NoComments(modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1F))
+                    .weight(1F), articleTitle)
             }
 
 //            Spacer(
@@ -159,16 +159,29 @@ fun DiscussDetailsLoading() {
 }
 
 @Composable
-fun NoComments(modifier: Modifier = Modifier) {
+fun NoComments(modifier: Modifier = Modifier,
+    title: String) {
+
+        Column(modifier = modifier.then(Modifier.fillMaxSize())) {
+            EmptySpaceView()
+
+            Text(
+                text = title,
+                style = Typography.h4,
+                modifier = Modifier.padding(16.dp)
+            )
+            Box(modifier = Modifier.weight(1f),
+                contentAlignment = Alignment.Center){
+                Text(modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    text = "No Comments",
+                    style = Typography.h1
+                )
+            }
+
+            }
 
 
-    Box(modifier = modifier.then(Modifier.fillMaxSize())) {
-        Text(
-            modifier = Modifier.align(Alignment.Center),
-            text = "No Comments",
-            style = Typography.h1
-        )
-    }
 
 }
 

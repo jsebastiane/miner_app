@@ -1,4 +1,4 @@
-package sebastian.company.min3rapp.domain.model
+package sebastian.company.min3rapp.domain.model.delete_asap
 
 import com.google.android.gms.ads.nativead.NativeAd
 import sebastian.company.min3rapp.data.remote.dto.articles.SourceDto

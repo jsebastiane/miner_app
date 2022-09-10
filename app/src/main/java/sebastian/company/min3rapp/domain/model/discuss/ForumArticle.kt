@@ -8,6 +8,6 @@ data class ForumArticle(
     val views: Int = 0,
     val commentsCount: Int = 0,
     val articleId: String = "",
-    val timePosted: Timestamp? = null
+    val dbAddDate: Timestamp? = null
 //    val createdAt: Timestamp
 )

@@ -1,7 +1,7 @@
 package sebastian.company.min3rapp.ui.my_news.components
 
 import androidx.recyclerview.widget.DiffUtil
-import sebastian.company.min3rapp.domain.model.DataArticle
+import sebastian.company.min3rapp.domain.model.delete_asap.DataArticle
 
 class MyNewsDiffUtil(
     private val oldList: List<DataArticle>,

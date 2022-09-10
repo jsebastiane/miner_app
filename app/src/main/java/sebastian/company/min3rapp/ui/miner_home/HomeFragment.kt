@@ -1,31 +1,24 @@
 package sebastian.company.min3rapp.ui.miner_home
 
-import android.app.Activity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
-import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import sebastian.company.min3rapp.R
 import sebastian.company.min3rapp.databinding.FragmentHomeBinding
 import sebastian.company.min3rapp.domain.model.Article
-import sebastian.company.min3rapp.domain.model.DataArticle
 import sebastian.company.min3rapp.ui.ViewPagerFragmentDirections
 import sebastian.company.min3rapp.ui.miner_home.components.NewsAction
 
@@ -52,7 +45,7 @@ class HomeFragment : Fragment(), NewsAction {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        createAdLoader()
+//        createAdLoader()
 //        adLoader.loadAds(AdRequest.Builder().build(), 3)
 
         observeViewModel()
@@ -62,17 +55,17 @@ class HomeFragment : Fragment(), NewsAction {
             layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         }
 
-//        viewModel.getArticlesCf() -------------
+        viewModel.getArticles()
 
         binding.refreshLayout.setOnRefreshListener {
-//            viewModel.getArticlesCf() -------------------
+            viewModel.getArticles()
         }
 
     }
 
     private fun observeViewModel(){
-        viewModel.requestState.observe(viewLifecycleOwner, Observer { request ->
-            request?.let {
+        viewModel.articlesState.observe(viewLifecycleOwner, Observer { articleState ->
+            articleState?.let {
                 binding.refreshLayout.isRefreshing = false
                 if(it.isLoading){
                     binding.homeProgressBar.visibility = View.VISIBLE
@@ -127,7 +120,7 @@ class HomeFragment : Fragment(), NewsAction {
         _binding = null
     }
 
-    override fun onClick(article: DataArticle) {
+    override fun onClick(article: Article) {
         if(article.url != null){
             goToNewsWindow(article.url)
         }else{

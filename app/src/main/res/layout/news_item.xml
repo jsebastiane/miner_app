@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:strokeColor="@color/transparent_button"
-    app:strokeWidth="1dp"
     android:elevation="16dp"
     app:cardBackgroundColor="@color/brand_darkblue_variant"
     app:cardCornerRadius="16dp"

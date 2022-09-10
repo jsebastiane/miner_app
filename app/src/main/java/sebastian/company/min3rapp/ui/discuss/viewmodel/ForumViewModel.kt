@@ -1,13 +1,11 @@
 package sebastian.company.min3rapp.ui.discuss.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -18,14 +16,17 @@ import sebastian.company.min3rapp.common.ForumDataType
 import sebastian.company.min3rapp.domain.model.User
 import sebastian.company.min3rapp.domain.model.discuss.*
 
-class ForumViewModel(private val dataType: ForumDataType,
-                     private val articleId: String?,
-                     private val commendId: String?): ViewModel() {
+class ForumViewModel(
+    private val dataType: ForumDataType,
+    private val articleId: String?,
+    private val commendId: String?): ViewModel() {
 
     private val firestoreDb = FirebaseFirestore.getInstance()
     private val forumPath = firestoreDb.collection("forumTopics")
 
     private val currentUser: String? = Firebase.auth.currentUser?.uid
+
+    private val shards = 10
 
 
     var addCommentState by mutableStateOf<AddCommentState>(AddCommentState())
@@ -49,11 +50,6 @@ class ForumViewModel(private val dataType: ForumDataType,
 
     init {
         getUser()
-        when(dataType){
-            ForumDataType.FORUM_TOPICS -> getForumTopics()
-            ForumDataType.FORUM_COMMENT -> getForumComments()
-            else -> getForumNestedReplies()
-        }
     }
 
     private fun getUser(){
@@ -61,8 +57,15 @@ class ForumViewModel(private val dataType: ForumDataType,
             firestoreDb.collection("users").document(id).get()
                 .addOnSuccessListener { document ->
                     user = document.toObject<User>()
+                    Log.d("UserRetrieval", "Success")
                 }.addOnFailureListener {
                     Log.d("UserRetrieval", "Failed")
+                }.addOnCompleteListener {
+                    when(dataType){
+                        ForumDataType.FORUM_TOPICS -> getForumTopics()
+                        ForumDataType.FORUM_COMMENT -> getForumComments()
+                        else -> getForumNestedReplies()
+                    }
                 }
 
         }
@@ -92,7 +95,7 @@ class ForumViewModel(private val dataType: ForumDataType,
 
 
     private fun getForumComments(){
-        forumCommentsState = ForumCommentsState(loading = true, forumComments = forumCommentsState.forumComments)
+        forumCommentsState = ForumCommentsState(loading = true)
         val tempList = mutableListOf<ForumComment>()
         articleId?.let {docId ->
             forumPath.document(docId).collection("comments")
@@ -103,6 +106,7 @@ class ForumViewModel(private val dataType: ForumDataType,
                         tempList.add(comment)
                     }
 
+                    Log.d("CheckCommentLikes", "Calling check comment likes")
                     checkCommentLikes(tempList)
 
                 }
@@ -125,7 +129,7 @@ class ForumViewModel(private val dataType: ForumDataType,
                             val reply = doc.toObject<ForumComment>()
                             tempList.add(reply)
                         }
-                        forumRepliesState = ForumCommentsState(forumComments = tempList)
+                        checkRepliesLikes(tempList)
                     }
                     .addOnFailureListener {
                         forumRepliesState = ForumCommentsState(error = "Failed to load comments")
@@ -182,13 +186,11 @@ class ForumViewModel(private val dataType: ForumDataType,
     }
 
 
-    //************************ DO NOT UPDATE COMMENTS LIST AFTER VOTE *************************
 
-    //vote is current reaction to certain comment (1,0,-1)
-    //shardVote is the absolute effect of downvoting or upvoting which can be (2,1,0,-1,-2)
+
     fun commentVote(key: String, vote: Int, shardVote: Int){
-        //Random shard allocator cod here!
         //Check size of currentReactionsMap -> can't exceed 4000
+        Log.d("Voting", "Voting Now")
         if(currentUser != null && articleId != null){
             val userDB = firestoreDb.collection("users").document(currentUser)
 //            val randomShard = FirestoreDb.collection("forumTopics")
@@ -209,8 +211,7 @@ class ForumViewModel(private val dataType: ForumDataType,
                     }
                 }
 
-            //shard.increment(shardVote)
-            println(shardVote.toString())
+            addVoteToShard(shardVote, key)
 
         }else{
             voteState = VoteState(success = false, error = "Failed to send vote")
@@ -227,13 +228,52 @@ class ForumViewModel(private val dataType: ForumDataType,
 
     //maybe run in a coroutine?
     private fun checkCommentLikes(comments: List<ForumComment>){
-        val tempList = comments
+
         if (user != null){
             for(reaction in user!!.currentReactionsMap){
-                tempList.find { it.commentId == reaction.key }?.userReaction = reaction.value
+                comments.find { it.commentId == reaction.key }?.userReaction = reaction.value
             }
         }
-        forumCommentsState = ForumCommentsState(forumComments = tempList)
+        forumCommentsState = ForumCommentsState(forumComments = comments)
+
+    }
+
+
+    private fun checkRepliesLikes(comments: List<ForumComment>){
+
+        if (user != null){
+            for(reaction in user!!.currentReactionsMap){
+                comments.find { it.commentId == reaction.key }?.userReaction = reaction.value
+            }
+        }
+        forumRepliesState = ForumCommentsState(forumComments = comments)
+
+
+    }
+
+    //adding vote to a shard that will be read every X minutes by MIN3R's cloud function
+    //and aggregated to update the comment's total votes
+    //vote is current reaction to certain comment (1,0,-1)
+    //shardVote is the absolute effect of downvoting or upvoting which can be (2,1,0,-1,-2)
+    private fun addVoteToShard(vote: Int, commentDocId: String){
+        val randomShard = (0..shards).random()
+        articleId?.let{
+            firestoreDb.collection("forumTopics")
+                .document(it)
+                .collection("comments")
+                .document(commentDocId)
+                .collection("vote_shards")
+                .document("votes$randomShard")
+                .set(mapOf("vote" to FieldValue.increment(vote.toLong())), SetOptions.merge())
+                .addOnSuccessListener {
+                    Log.d("VoteSharding", "Success")
+                }.addOnFailureListener {
+                    Log.d("VoteSharding", "Failed")
+                }
+        }
+
+
+
 
 
     }

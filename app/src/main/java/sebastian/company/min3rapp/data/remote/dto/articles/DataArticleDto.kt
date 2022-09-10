@@ -2,7 +2,7 @@ package sebastian.company.min3rapp.data.remote.dto.articles
 
 import android.annotation.SuppressLint
 import com.google.gson.annotations.SerializedName
-import sebastian.company.min3rapp.domain.model.DataArticle
+import sebastian.company.min3rapp.domain.model.delete_asap.DataArticle
 import java.text.SimpleDateFormat
 
 data class DataArticleDto(
@@ -19,7 +19,7 @@ data class DataArticleDto(
 )
 
 @SuppressLint("SimpleDateFormat")
-fun DataArticleDto.toDataArticle(): DataArticle{
+fun DataArticleDto.toDataArticle(): DataArticle {
     val dateTemplate = "MMMM d"
     val parser = SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z")
     val formatter = SimpleDateFormat(dateTemplate)

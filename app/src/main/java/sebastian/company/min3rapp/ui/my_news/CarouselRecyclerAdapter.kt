@@ -24,7 +24,7 @@ class CarouselRecyclerAdapter: RecyclerView.Adapter<CarouselRecyclerAdapter.Caro
     override fun onBindViewHolder(holder: CarouselViewHolder, position: Int) {
         val article = oldArticleList[position]
         holder.binding.newsHeadline.text = article.title
-        holder.binding.timeSincePosted.text = article.publishedAt
+        holder.binding.timeSincePosted.text = article.dbAddDate?.toDate().toString()
         Glide.with(holder.binding.root)
             .load(article.urlToImage)
             .into(holder.binding.newsImage)

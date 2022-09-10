@@ -14,7 +14,6 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.*
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
-import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
@@ -22,7 +21,7 @@ import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import sebastian.company.min3rapp.databinding.FragmentMyNewsBinding
-import sebastian.company.min3rapp.domain.model.DataArticle
+import sebastian.company.min3rapp.domain.model.delete_asap.DataArticle
 import sebastian.company.min3rapp.ui.ViewPagerFragmentDirections
 import sebastian.company.min3rapp.ui.my_news.components.MyNewsAction
 

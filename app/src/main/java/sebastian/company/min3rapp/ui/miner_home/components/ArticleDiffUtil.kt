@@ -2,11 +2,10 @@ package sebastian.company.min3rapp.ui.miner_home.components
 
 import androidx.recyclerview.widget.DiffUtil
 import sebastian.company.min3rapp.domain.model.Article
-import sebastian.company.min3rapp.domain.model.DataArticle
 
 class ArticleDiffUtil(
-    private val oldList: List<DataArticle>,
-    private val newList: List<DataArticle>
+    private val oldList: List<Article>,
+    private val newList: List<Article>
 ): DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {

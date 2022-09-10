@@ -12,17 +12,13 @@ import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import sebastian.company.min3rapp.common.UserPrefs
 import sebastian.company.min3rapp.data.remote.dto.articles.DataDto
 import sebastian.company.min3rapp.data.remote.dto.articles.toDataArticle
 import sebastian.company.min3rapp.domain.model.AdsState
-import sebastian.company.min3rapp.domain.model.ArticlesListState
-import sebastian.company.min3rapp.domain.model.DataArticle
-import sebastian.company.min3rapp.domain.model.DataListState
+import sebastian.company.min3rapp.domain.model.delete_asap.DataArticle
+import sebastian.company.min3rapp.domain.model.delete_asap.DataListState
 
 class MyNewsViewModel(application: Application): AndroidViewModel(application){
 

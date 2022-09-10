@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.google.android.gms.ads.nativead.NativeAd
 import sebastian.company.min3rapp.R
 import sebastian.company.min3rapp.databinding.*
-import sebastian.company.min3rapp.domain.model.DataArticle
+import sebastian.company.min3rapp.domain.model.delete_asap.DataArticle
 import sebastian.company.min3rapp.ui.my_news.components.MyNewsAction
 import sebastian.company.min3rapp.ui.my_news.components.MyNewsDiffUtil
 

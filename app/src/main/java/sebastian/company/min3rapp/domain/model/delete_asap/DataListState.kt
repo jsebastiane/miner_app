@@ -1,4 +1,6 @@
-package sebastian.company.min3rapp.domain.model
+package sebastian.company.min3rapp.domain.model.delete_asap
+
+import sebastian.company.min3rapp.domain.model.delete_asap.DataArticle
 
 data class DataListState(
     val isLoading: Boolean = false,

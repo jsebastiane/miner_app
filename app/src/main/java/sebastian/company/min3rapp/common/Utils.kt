@@ -136,7 +136,7 @@ fun fakeForumCommentsList(): List<ForumComment>{
 
 fun fakeForumArticles(): List<ForumArticle>{
     return listOf(
-        ForumArticle(Article("Bitcoin Magazine",
+        ForumArticle(Article(source = "Bitcoin Magazine",
             title = "Federated Sidechains Are Bitcoin's Original Upgradeable Sidechain Implementation," +
                     "in addition to establishing poo poo and spaghetti",
             urlToImage =  "https://crypto.snapi.dev/images/v1/x/z/img-7112-172273.png"),
@@ -144,42 +144,42 @@ fun fakeForumArticles(): List<ForumArticle>{
             views = 245674,
             commentsCount = 73
             ),
-        ForumArticle(Article("FXEmpire",
+        ForumArticle(Article(source = "FXEmpire",
             title = "Bitcoin (BTC) Fear & Greed Index Slides to the Edge of Extreme Fear",
             urlToImage =  "https://crypto.snapi.dev/images/v1/b/o/shutterstock-1930531490-7-172274.jpg"),
             articleId = "2",
             views = 134,
             commentsCount = 55
         ),
-        ForumArticle(Article("FXEmpire",
+        ForumArticle(Article(source = "FXEmpire",
             title = "Crypto Market Daily Highlights – BTC and the Broader Market Hit Reverse",
             urlToImage =  "https://crypto.snapi.dev/images/v1/3/7/shutterstock-2153066245-6-172266.jpg"),
             articleId = "3",
             views = 121,
             commentsCount = 46
         ),
-        ForumArticle(Article("Benzinga",
+        ForumArticle(Article(source = "Benzinga",
             title = "So Do You Believe Bitcoin Is Going Above \$40K, Ethereum Above \$3K And Dogecoin Above 20 Cents By End Of 2022?",
             urlToImage =  "https://crypto.snapi.dev/images/v1/h/v/doge-ethereum-bitcoin-172263.jpg"),
             articleId = "4",
             views = 91,
             commentsCount = 61
         ),
-        ForumArticle(Article("Bitcoin",
+        ForumArticle(Article(source = "Bitcoin",
             title = "Tesla Reveals Bitcoin Holdings Worth \$222 Million in Latest SEC Filing",
             urlToImage =  "https://crypto.snapi.dev/images/v1/n/y/tesla-sec-172261.jpg"),
             articleId = "5",
             views = 81,
             commentsCount = 11
         ),
-        ForumArticle(Article("Bitcoinist",
+        ForumArticle(Article(source = "Bitcoinist",
             title = "Bitcoin Addresses In Profit Falls Below 50%",
             urlToImage =  "https://crypto.snapi.dev/images/v1/g/3/bitcoin-2-630x420-172253.jpeg"),
             articleId = "6",
             views = 39,
             commentsCount = 5
         ),
-        ForumArticle(Article("Inside Bitcoins",
+        ForumArticle(Article(source = "Inside Bitcoins",
             title = "Bitcoin Price Prediction for Today, July 25: BTC Trades Below \$22,000 as Bears Show-up",
             urlToImage =  "https://crypto.snapi.dev/images/v1/c/l/crypto17-172229.jpg"),
             articleId = "7",
@@ -188,6 +188,16 @@ fun fakeForumArticles(): List<ForumArticle>{
         )
     )
 }
+
+//tempList.forEachIndexed { index, forumComment ->
+//            if(user!!.currentReactionsMap.keys.any { it == forumComment.commentId }){
+//                tempList.remove(forumComment)
+//                tempList.add(index, ForumComment(poster = forumComment.poster, commentId = forumComment.commentId,
+//                    text = forumComment.text, nestedReplies = forumComment.nestedReplies, votes = forumComment.votes,
+//                    timePosted = forumComment.timePosted, userReaction = user!!.currentReactionsMap[forumComment.commentId]!!,
+//                timeSincePosted = forumComment.timeSincePosted))
+//            }
+//        }
 
 
 

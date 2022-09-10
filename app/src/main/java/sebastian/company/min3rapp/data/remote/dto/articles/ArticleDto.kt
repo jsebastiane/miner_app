@@ -1,6 +1,7 @@
 package sebastian.company.min3rapp.data.remote.dto.articles
 
 import android.annotation.SuppressLint
+import com.google.firebase.Timestamp
 import sebastian.company.min3rapp.domain.model.Article
 import java.text.SimpleDateFormat
 
@@ -27,9 +28,8 @@ fun ArticleDto.toArticle(): Article {
 
 
     return Article(
-        author = author,
-        publishedAt = date,
-        sourceDto = source,
+        source = author,
+        dbAddDate = Timestamp.now(),
         title = title,
         url = url,
         urlToImage = urlToImage
