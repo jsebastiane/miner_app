@@ -4,6 +4,7 @@ A comprehensive Android crypto app offering news stories, a discussion forum, re
 
 ![Min3rBanner](https://github.com/jsebastiane/miner_app/assets/52160775/620527f1-8d21-430b-8bf8-50e0db58d264)
 
+(Real screenshots above and yes those are iphones lol)<br/>
 # Technology Used
 
 This app was written 100% in Kotlin.<br/>
