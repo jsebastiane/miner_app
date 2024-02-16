@@ -6,8 +6,8 @@ A comprehensive Android crypto app offering news stories, a discussion forum, re
 
 # Technology Used
 
-This app was written 100% in Kotlin
-It was originally developed with Views but was updated to Jetpack Compose in the latest version
+This app was written 100% in Kotlin.<br/>
+It was originally developed with Views but was updated to Jetpack Compose in the latest version.
 It makes use of the following:
 
 -> Jetpack Compose<br />
